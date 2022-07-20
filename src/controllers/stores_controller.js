@@ -2,13 +2,14 @@ const mysqlConnection = require('../database/database');
 
 
 const getAll = async (req,res) => {
-     mysqlConnection.query("SELECT * FROM stores", (err, rows,fields) => {
+     mysqlConnection.query("SELECT * FROM stores", async (err, rows,fields) => {
         try {
-            if (err) {
+            if (!rows) {
                 console.log(err);
                 res.status(404).msg('Resource doesnt exist')
             } else {
-                res.status(200).json(rows)
+                const data = await rows;
+                res.status(200).json(data)
             };         
         } catch (err) {
             console.log(err);
