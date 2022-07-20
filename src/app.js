@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const routes = require('./routes');
 const morgan = require('morgan');
-
+const dotenv = require('dotenv').config();
 
 app.use(express.json());
 app.use(morgan('dev'));
