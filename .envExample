@@ -1,0 +1,4 @@
+HOST = localhost
+DATABASE = latablita
+PASSWORD = yourPassword
+USER = root
