@@ -36,7 +36,29 @@ const getById = async (req, res) => {
     });
 };
 
+const create = async (req,res) => {
+    const {id, name, city} = req.body;
+    const query = "CALL addOrEditStore(?,?,?)"; // cada ? representa un dato que le vamos a pasar para insertar en la db 
+    mysqlConnection.query(query,[id, name, city],( err, rows, fields) => {// la query del procedimiento y los valores del body que le pasamos
+        try {
+            if (!err) {
+                const storeCreated = mysqlConnection.query('SELECT * FROM stores WHERE id = ?', id, async (err , rows, fields) => {
+                    const data = await rows; 
+                    res.status(200).json(data) 
+                })
+            }else {
+                res.status(400).msg('Error creating resource')
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json('Internal Server Error')
+        }
+    }) 
+    
+};
 
 module.exports = {
-    getAll
+    getAll,
+    getById,
+    create
 }
