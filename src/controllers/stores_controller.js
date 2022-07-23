@@ -55,10 +55,27 @@ const create = async (req,res) => {
     }
 };
 
-
+const update = async (req,res) => {
+    try {
+        const {id} = req.params; 
+        const {name, city} = req.body;
+        const query = "CALL addOrEditStore(?,?,?)"; // cada ? representa un dato que le vamos a pasar para insertar en la db 
+        mysqlConnection.query(query,[id, name, city],( err, rows, fields) => {// la query del procedimiento y los valores del body que le pasamos      
+                if (err) {
+                    res.status(400).json('Error creating resource')
+                }else{
+                    res.status(201).json(`El recurso ha sido actualizado con éxito.`);
+                }   
+            }) 
+    } catch (err) {
+        res.status(500).json('Internal Server Error')
+    }
+};
 
 module.exports = {
     getAll,
     getById,
-    create
+    create,
+    update
+    
 }
