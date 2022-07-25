@@ -29,7 +29,23 @@ const getById = async (req,res) => {
     });
 };
 
+const create = async (req,res) => {
+    const {id,name, position_id,store_id} = req.body;
+    mysqlConnection.query("CALL addOrEditStaff(?,?,?,?);",[id,name,position_id,store_id], (err, rows ,fields) => {
+        try {
+            if (!err) {
+                res.status(201).json('Staff created');
+            }else{
+                res.status(400).json('Error create Staff');
+            };
+        } catch (err) {
+            res.status(500).json('Internal Server Error');
+        };
+    });
+};
+
 module.exports = {
     getAll,
-    getById
+    getById,
+    create
 };
