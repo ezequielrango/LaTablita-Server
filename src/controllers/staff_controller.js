@@ -44,8 +44,26 @@ const create = async (req,res) => {
     });
 };
 
+const update = async (req,res) => {
+    const {id} = req.params;
+    const {name, position_id,store_id} = req.body;
+    mysqlConnection.query('CALL addOrEditStaff(?,?,?,?);', [id,name, position_id,store_id], (err, rows, fields) => {
+        try {
+            if (err || !rows) {
+                console.log(err);
+                res.status(400).json('Error update Staff');
+            }else{
+                res.status(201).json('Update Staff succesfully');
+            }
+        } catch (err) {
+            res.status(500).json('Internal Server Error');
+        };
+    });
+};
+
 module.exports = {
     getAll,
     getById,
-    create
+    create,
+    update
 };
