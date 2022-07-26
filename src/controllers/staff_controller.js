@@ -18,7 +18,7 @@ const getById = async (req,res) => {
     const {id} = req.params;
     mysqlConnection.query("SELECT * FROM staff WHERE id= ?;", id, (err,rows,fields) => {
         try {
-            if (!rows) {
+            if (err || rows.length === 0) {
                 res.status(404).json('Not found');
             }else{
                 res.status(200).json(rows);
@@ -61,9 +61,25 @@ const update = async (req,res) => {
     });
 };
 
+const remove = async (req,res) => {
+    const {id} = req.params;
+    mysqlConnection.query('DELETE FROM staff WHERE id= ?', id , (err, rows, fields) => {
+        try {
+            if (err) {
+                res.status(400).json('Error staff delete');
+            }else{
+                res.status(201).json('Staff deleted');
+            };
+        } catch (err) {
+            res.status(500).json('Internal Server Error');
+        };
+    });
+}
+
 module.exports = {
     getAll,
     getById,
     create,
-    update
+    update,
+    remove
 };
